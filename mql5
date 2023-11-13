@@ -1,0 +1,64 @@
+
+// MQL5 EA Idea Pro mt5
+// This code is an example of a simple MQL5 Robot
+
+#include <Trade\Trade.mqh> // Include MQL5 standard library for trading functions
+CTrade trade; // Create instance of CTrade
+
+// Input parameters
+input double Lots = 0.1;   // Trading lot size
+input int StopLoss = 100;  // Stop Loss in points
+input int TakeProfit = 200; // Take Profit in points
+input int MagicNumber = 123; // Magic Number
+
+// Global variables
+int ticket = -1; // Order ticket
+bool isTradingEnabled = true; // Trading switch
+
+// OnTick event handler
+void OnTick()
+{
+    // Only perform trading operations when trading is enabled
+        if (isTradingEnabled)
+            {
+                    // Check if there are no open orders
+                            if (OrdersTotal() == 0)
+                                    {
+                                                // Place a Buy order
+                                                            ticket = trade.Buy(Lots, _Symbol, _Ask, StopLoss, TakeProfit, 'Buy Order', MagicNumber);
+                                                                    }
+                                                                        }
+                                                                        }
+
+                                                                        // OnTrade event handler
+                                                                        void OnTrade()
+                                                                        {
+                                                                            // Check if trading switch is on
+                                                                                if (isTradingEnabled)
+                                                                                    {
+                                                                                            // Check if the last operation was successful
+                                                                                                    if (trade.ResultRetcode() == TRADE_RETCODE_DONE)
+                                                                                                            {
+                                                                                                                        // Print successful operation message
+                                                                                                                                    PrintFormat('Order #%d is placed successfully.', ticket);
+                                                                                                                                            }
+                                                                                                                                                    else
+                                                                                                                                                            {
+                                                                                                                                                                        // Print error message
+                                                                                                                                                                                    PrintFormat('Order placement failed. Error code: %d', trade.ResultRetcode());
+                                                                                                                                                                                            }
+                                                                                                                                                                                                }
+                                                                                                                                                                                                }
+                                                                                                                                                                                                
+                                                                                                                                                                                                // Function to disable trading
+                                                                                                                                                                                                void DisableTrading()
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    isTradingEnabled = false;
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                    
+                                                                                                                                                                                                    // Function to enable trading
+                                                                                                                                                                                                    void EnableTrading()
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        isTradingEnabled = true;
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                        
